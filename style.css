@@ -1,0 +1,24 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-image: url(img/pattern-7451714_1920.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.title, .display-turn, .buttons {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 2rem;
+    font-size: 2rem;
+    color: #fff;
+}
+.buttons div{
+    padding-left: 2rem;
+    cursor: pointer;
+}
