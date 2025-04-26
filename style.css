@@ -10,6 +10,7 @@ body{
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    
 }
 .title, .display-turn, .buttons {
     display: flex;
@@ -40,9 +41,11 @@ body{
     height: auto;
     min-width: 50px;
     min-height: 50px;
+    font-size: 2rem;
     text-align: center;
+    align-items: center;
     border-radius: 1rem;
-    padding-left: 1.6vw;
+    padding: 1.6vw;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
     color: #fff;

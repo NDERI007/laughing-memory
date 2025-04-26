@@ -38,7 +38,7 @@ const initializeVar = (data) => {
 const EventForGameBoard = (data) => {
     document.querySelectorAll(".box").forEach(box => {
         box.addEventListener("click",(Event) => {
-            playMove(Event.target,data)
+            playMove(Event.target,data);
         })
     })
 }
@@ -49,5 +49,20 @@ const StartGame = (data) => {
     initializeVar(data);
 }
 const playMove = (box, data) => {
+    //is game over if true then do nothing
+    if (data.gameover || data.round > 8) {
+        return
+    }
+    //Check if game box has a ;etter in it, if so do not do anything
+    if (data.board[box.id] === "X" || data.board[box.id] === "O") {
+        return
+    }
+    //adjust the DOM for player move, and then check win conditions
+
+    data.board[box.id] = data.currentPlayer;
+    box.textContent = data.currentPlayer;
+    box.classList.add(data.currentPlayer === "X" ? "player1" : "player2");
+    //increase round no #
+    data.round++
     console.log(box, data);
 }
