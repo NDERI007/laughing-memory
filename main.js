@@ -13,6 +13,18 @@
 //after each move check win conditions if not  met, set other player as active
 
 //human vs human first, easy AI then hard Ai
+
+const winningCond = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+];
+
 const form = document.querySelector("form");
 form.addEventListener("submit", (e) => {
     //prevent page refresh
@@ -65,4 +77,38 @@ const playMove = (box, data) => {
     //increase round no #
     data.round++
     console.log(box, data);
-}
+
+    //check end condtions
+    if (endCondition(data)) {
+        // adjust DOM to reflect endConditions
+    }
+};
+
+const endCondition = (data) => {
+    // 3 potential options
+    //winner
+    //tie
+    //game not over yet
+    if (checkWinner(data)) {
+        //adjust DOM here to reflect win
+        return true
+    } else if (data.round === 9) {
+        // adjust DOM here to reflect win
+        return true
+    }
+    return false
+};
+
+const checkWinner = (data) => {
+    let result = false;
+    winningCond.forEach(condition => {
+        if (data.board[condition[0]] === data.board[condition[1]] && 
+            data.board[condition[1]] === data.board[condition[2]]
+        ) {
+            console.log("Player has won");
+            data.gameover = true;
+            result = true;
+        }
+    });
+    return result
+};
