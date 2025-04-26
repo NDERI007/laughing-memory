@@ -22,3 +22,127 @@ body{
     padding-left: 2rem;
     cursor: pointer;
 }
+.game-wrapper{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.box{
+    width: auto;
+    height: auto;
+    min-width: 50px;
+    min-height: 50px;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding-left: 1.6vw;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    color: #fff;
+    box-shadow: 0 0 0.2rem #fff, 0 0 0.2rem #fff, 0 0 2rem #bc13fe, 0 0 0.8rem #bc13fe, 0 0 2.8rem #bc13fe, inset 0 0 1.3rem #bc13fe;
+}
+.player1{
+    text-shadow: 0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 25px #0fa;
+}
+.player2{
+    font-size: max(4vw, 3rem);
+    text-shadow: 0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 25px #f89;
+}
+.box:hover{
+    transform: scale(1.1);
+}
+@media only screen and (max-width: 980px) {
+    .game-wrapper{
+        width: 100vw;
+    }
+    .gameboard{
+        width: auto;
+    }
+}
+.modal-wrapper {
+    background-color: rgb(0, 0, 0); /* fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /*Black w/ opacity */
+    width: 100vw;
+    height: 100vh;
+    position: fixed; /* Stay in place */
+}
+.modal {
+    display: flex; /*hidden by default */
+    position: fixed; /* fixed in place */
+    z-index: 1; /* Sit on top */
+    left: 0%;
+    top: 0%;
+    width: 100%; /*Full width */
+    overflow: auto;
+    height: fit-content;
+    font-size: max(5vh, 20px);
+}
+
+/* Modal Content/Box */
+.modal-content, .front-content {
+    text-align: center;
+    width: 100%; /* could be more or less depending on the screen size */
+    border: thin;
+    color: #0fa;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.front-content {
+    margin: 5vh auto;
+    width: auto;
+    border-radius: 0%;
+    border: 0.2rem solid #f89;
+    padding: 2rem 4rem 2rem 4rem;
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+}
+.front:hover, .front:focus {
+    color: #f89;
+    cursor: pointer;
+}
+.inputField {
+    display: flex;
+    font-size: max(1.5vw, 25px);
+    width: 100%;
+    padding-bottom: 2.5rem;
+    align-items: center;
+}
+.form-class{
+    height: 2rem;
+    margin-left: 2rem;
+    background-color: rgba(44, 66, 164, 0.198);
+    border: 0.1rem solid #fff;
+    padding: 0.5rem;
+    color: #fff;
+    font-size: 1.5rem;
+    width: 50%;
+}
+.input-label{
+    max-width: 50%;
+}
+input[type = "radio"] {
+    width: unset;
+    margin: 0.25rem 0.5em 0 2rem; /* top right bottom left */
+    vertical-align: middle;
+    min-height: 1.25rem;
+    min-width: 1.25rem;
+    border: 0px;
+}
+.form-class:focus{
+    box-shadow: none;
+    outline: 0%;
+}
+.start-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:200px;
+    padding: 0.75rem;
+    color: inherit;
+    border-radius: 10px;
+    cursor: pointer;
+
+}
