@@ -35,6 +35,7 @@ form.addEventListener("submit", (e) => {
     const data = Object.fromEntries(formData);
     document.querySelector(".modal-wrapper").setAttribute("hidden", true);
     StartGame(data);
+    adjustDom('display-turn', `${data.playerName}'s turn`)
 });
 
 const initializeVar = (data) => {
@@ -65,7 +66,7 @@ const playMove = (box, data) => {
     if (data.gameover || data.round > 8) {
         return
     }
-    //Check if game box has a ;etter in it, if so do not do anything
+    //Check if game box has a letter in it, if so do not do anything
     if (data.board[box.id] === "X" || data.board[box.id] === "O") {
         return
     }
@@ -76,12 +77,14 @@ const playMove = (box, data) => {
     box.classList.add(data.currentPlayer === "X" ? "player1" : "player2");
     //increase round no #
     data.round++
-    console.log(box, data);
-
     //check end condtions
     if (endCondition(data)) {
         // adjust DOM to reflect endConditions
+        return
     }
+    //change current player
+    //change the dom and current player
+    changePlayer(data);
 };
 
 const endCondition = (data) => {
@@ -91,9 +94,13 @@ const endCondition = (data) => {
     //game not over yet
     if (checkWinner(data)) {
         //adjust DOM here to reflect win
+        let winnerName = data.currentPlayer === "X" ? data.playerName : data.playername;
+        adjustDom('display-turn', winnerName + " has won the game")
         return true
     } else if (data.round === 9) {
         // adjust DOM here to reflect win
+        adjustDom('display-turn'," it's a tie")
+        data.gameover = true;
         return true
     }
     return false
@@ -105,10 +112,21 @@ const checkWinner = (data) => {
         if (data.board[condition[0]] === data.board[condition[1]] && 
             data.board[condition[1]] === data.board[condition[2]]
         ) {
-            console.log("Player has won");
             data.gameover = true;
             result = true;
         }
     });
     return result
 };
+
+const adjustDom = (className, textContent) => {
+    const elem= document.querySelector(`.${className}`);
+    elem.textContent = textContent;
+}
+
+const changePlayer =(data) => {
+    data.currentPlayer = data.currentPlayer === "X" ? "O" : "X";
+    //adjust the dom
+    let dispTurntext = data.currentPlayer === "X" ? data.playerName : data.playername;
+    adjustDom('display-turn', `${dispTurntext}'s turn`)
+}
