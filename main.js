@@ -35,7 +35,6 @@ form.addEventListener("submit", (e) => {
     const data = Object.fromEntries(formData);
     document.querySelector(".modal-wrapper").setAttribute("hidden", true);
     StartGame(data);
-    adjustDom('display-turn', `${data.playerName}'s turn`)
 });
 
 const initializeVar = (data) => {
@@ -58,8 +57,11 @@ const EventForGameBoard = (data) => {
 const StartGame = (data) => {
     //initialize game variable
     //add event listners to the game
-    EventForGameBoard(data);
+    adjustDom('display-turn', `${data.playerName}'s turn`);
     initializeVar(data);
+    EventForGameBoard(data);
+    
+    
 }
 const playMove = (box, data) => {
     //is game over if true then do nothing
@@ -84,7 +86,14 @@ const playMove = (box, data) => {
     }
     //change current player
     //change the dom and current player
-    changePlayer(data);
+    if (data.choice === 0) {
+        changePlayer(data);
+    } else if (data.choice === 1) {
+        //easy ai
+        //change back to player one
+        easyAi(data);
+        data.currentPlayer = "X";
+    }
 };
 
 const endCondition = (data) => {
@@ -128,5 +137,17 @@ const changePlayer =(data) => {
     data.currentPlayer = data.currentPlayer === "X" ? "O" : "X";
     //adjust the dom
     let dispTurntext = data.currentPlayer === "X" ? data.playerName : data.playername;
-    adjustDom('display-turn', `${dispTurntext}'s turn`)
+    adjustDom('display-turn', `${dispTurntext}'s turn`);
 }
+
+const easyAi = (data) => {
+    changePlayer(data);
+    let availableSpace = data.board.filter((space) => space !== "X" && space !== "O");
+    let move = availableSpace[Math.floor(Math.random() * availableSpace.length)]; //Get a random item from a javascript array
+    data.board[move] = data.player2;
+    let box = document.getElementById(`${move}`);
+    box.textContent = data.player2;
+    box.classList.add("playername");
+    endCondition(data);
+    changePlayer(data);
+};
