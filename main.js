@@ -57,7 +57,7 @@ const EventForGameBoard = (data) => {
 const StartGame = (data) => {
   //initialize game variable
   //add event listners to the game
-  adjustDom("display-turn", `${data.playerName}'s turn`);
+  adjustDom("display-turn", `${data.player1Name}'s turn`);
   initializeVar(data);
   EventForGameBoard(data);
 };
@@ -91,6 +91,14 @@ const playMove = (box, data) => {
     //change back to player one
     easyAi(data);
     data.currentPlayer = "X";
+  } else if (data.choice === 2) {
+    changePlayer(data);
+    invincibleAI(data);
+    if (endCondition(data)) {
+      return;
+    }
+    changePlayer(data);
+    console.log(data);
   }
 };
 
@@ -99,11 +107,12 @@ const endCondition = (data) => {
   //winner
   //tie
   //game not over yet
-  if (checkWinner(data)) {
+  if (checkWinner(data, data.currentPlayer)) {
     //adjust DOM here to reflect win
     let winnerName =
-      data.currentPlayer === "X" ? data.playerName : data.playername;
+      data.currentPlayer === "X" ? data.player1Name : data.player2Name;
     adjustDom("display-turn", winnerName + " has won the game");
+    data.gameover = true;
     return true;
   } else if (data.round === 9) {
     // adjust DOM here to reflect win
@@ -114,14 +123,14 @@ const endCondition = (data) => {
   return false;
 };
 
-const checkWinner = (data) => {
+const checkWinner = (data, player) => {
   let result = false;
   winningCond.forEach((condition) => {
     if (
-      data.board[condition[0]] === data.board[condition[1]] &&
-      data.board[condition[1]] === data.board[condition[2]]
+      data.board[condition[0]] === player &&
+      data.board[condition[1]] === player &&
+      data.board[condition[2]] === player
     ) {
-      data.gameover = true;
       result = true;
     }
   });
@@ -137,7 +146,7 @@ const changePlayer = (data) => {
   data.currentPlayer = data.currentPlayer === "X" ? "O" : "X";
   //adjust the dom
   let dispTurntext =
-    data.currentPlayer === "X" ? data.playerName : data.playername;
+    data.currentPlayer === "X" ? data.player1Name : data.player2Name;
   adjustDom("display-turn", `${dispTurntext}'s turn`);
 };
 
@@ -150,9 +159,79 @@ const easyAi = (data) => {
   data.board[move] = data.player2;
   let box = document.getElementById(`${move}`);
   box.textContent = data.player2;
-  box.classList.add("playername");
-  const gameOver = endCondition(data);
-  if (!gameOver) {
-    changePlayer(data);
+  box.classList.add("player2Name");
+
+  if (endCondition(data)) {
+    return;
   }
+
+  changePlayer(data);
+};
+
+const invincibleAI = (data) => {
+  data.round++;
+  // get best possible moves from minimax algorithm
+  const move = minimax(data, "O").index;
+  data.board[move] = data.player2;
+  let box = document.getElementById(`${move}`);
+  box.textContent = data.player2;
+  box.classList.add("player2");
+  console.log(data);
+};
+
+const minimax = (data, player) => {
+  let availableSpace = data.board.filter(
+    (space) => space !== "X" && space !== "O"
+  );
+  if (checkWinner(data, data.player2)) {
+    return {
+      score: 100,
+    };
+  } else if (checkWinner(data, data.player1)) {
+    return {
+      score: -100,
+    };
+  } else if (availableSpace.length === 0) {
+    return {
+      score: 0,
+    };
+  }
+  //check if winner, if player1 wins set score to -100
+  //if tie set score to 0
+  //if win set score to 100
+  const potentialMoves = [];
+  //loop over available spaces to get list of potential moves and check if wins
+  for (let i = 0; i < availableSpace.length; i++) {
+    let move = {};
+    move.index = data.board[availableSpace[i]];
+    data.board[availableSpace[i]] = player;
+    if (player === "O") {
+      move.score = minimax(data, "X").score;
+    } else {
+      move.score = minimax(data, "O").score;
+    }
+    //set the move to the board
+    data.board[availableSpace[i]] = move.index;
+    //push the potential move to the array
+    potentialMoves.push(move);
+  }
+  let bestMove = 0;
+  if (player === "O") {
+    let bestScore = -10000;
+    for (let i = 0; i < potentialMoves.length; i++) {
+      if (potentialMoves[i].score > bestScore) {
+        bestScore = potentialMoves[i].score;
+        bestMove = i;
+      }
+    }
+  } else {
+    let bestScore = 10000;
+    for (let i = 0; i < potentialMoves.length; i++) {
+      if (potentialMoves[i].score < bestScore) {
+        bestScore = potentialMoves[i].score;
+        bestMove = i;
+      }
+    }
+  }
+  return potentialMoves[bestMove];
 };
