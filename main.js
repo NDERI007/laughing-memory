@@ -25,6 +25,14 @@ const winningCond = [
   [2, 4, 6],
 ];
 
+const NewGame = document.querySelector("#restart-button");
+
+const ResetGame = document.querySelector("#reset-button");
+
+NewGame.addEventListener("click", () => {
+  location.reload();
+});
+
 const form = document.querySelector("form");
 form.addEventListener("submit", (e) => {
   //prevent page refresh
@@ -47,11 +55,23 @@ const initializeVar = (data) => {
   data.gameover = false;
 };
 
+const resetDom = () => {
+  document.querySelectorAll(".box").forEach((box) => {
+    box.className = "box";
+    box.textContent = "";
+  });
+};
+
 const EventForGameBoard = (data) => {
   document.querySelectorAll(".box").forEach((box) => {
     box.addEventListener("click", (Event) => {
       playMove(Event.target, data);
     });
+  });
+  ResetGame.addEventListener("click", () => {
+    initializeVar(data);
+    resetDom();
+    adjustDom("display-turn", `${data.player1Name}'s turn`);
   });
 };
 const StartGame = (data) => {
